@@ -119,7 +119,27 @@ size_t 在``stddef.h``头文件中定义。
 
 ## 字符串
 比较特殊一点，专门写
+怎么声明和操作字符串：
 https://www.runoob.com/cprogramming/c-strings.html
+
+声明字符串
+```C
+char [] s; // 在stack里，s指向数组第一个字符
+char *s; // 在data segment里，s指向数组第一个字符
+```
+两种方式有细微差别
+1. If we create a string as a ``char[]``, we can modify its characters because its memory lives in our stack space. 
+We cannot set a ``char[]`` equal to another value, **because it is not a pointer; it refers to the block of memory reserved for the original array**. 
+2. If we create a string as a ``char *``, we cannot modify its characters because its memory lives in the data segment. We can set a ``char *``equal to another value, **because it is a  reassign-able pointer.**
+	- ``sizeof()`` 永远返回8(size of pointer) 
+
+字符串怎么做参数：
+（TODO）
+
+string operation:
+![](https://i.imgur.com/sKFrjIk.png)
+
+
 
 # 运算符
 ``sizeof()``  
@@ -341,3 +361,32 @@ void *realloc(void *address, int newsize);
 
 // void * 类型表示未确定类型的指针。C、C++ 规定 void * 类型可以通过类型转换强制转换为任何其它类型的指针。
 ```
+
+# 函数
+## ``error()``
+## ``strtol()``
+参考： http://www.runoob.com/cprogramming/c-function-strtol.html
+```C
+#include <stdlib.h>
+
+long int strtol(const char *nptr, char **endptr, int base);
+```
+
+**描述**
+C 库函数 ``long int strtol(const char *str, char **endptr, int base)`` 把参数 str 所指向的字符串根据给定的 base 转换为一个长整数（类型为 long int 型），base 必须介于 2 和 36（包含）之间，或者是特殊值 0。
+
+**参数**
+- str -- 要转换为长整数的字符串。
+- endptr -- 对类型为 char* 的对象的引用，其值由函数设置为 str 中数值后的下一个字符。
+- base -- 基数，必须介于 2 和 36（包含）之间，或者是特殊值 0。
+
+> ``int a; int* a; int** a; int (*a)[]; int (*a)(int)``
+> https://blog.csdn.net/wang13342322203/article/details/85228415
+> 
+- a) int a;表示一个内存空间，这个空间用来存放一个整数（int）；
+- b) int* a;表示一个内存空间，这个空间用来存放一个指针，这个指针指向一个存放整数的空间，即a)中提到的空间；
+- c) int** a;表示一个内存空间，这个空间用来存放一个指针，这个指针指向一个存放指针的空间，并且指向的这个空间中的指针，指向一个整数。也简单的说，指向了一个b)中提到的空间；
+- d) int (*a)[4];表示一个内存空间，这个空间用来存放一个指针，这个指针指向一个长度为4、类型为int的数组；和int** a的区别在于，++、+=1之后的结果不一样，其他用法基本相同。
+- 以上四种类型见上图表示。
+- e) int (*a)(int);表示一个内存空间，这个空间用来存放一个指针，这个指针指向一个函数，这个函数有一个类型为int的参数，并且函数的返回类型也是int。
+- f)int *p[]和int (*p)[]; 前者是指针数组，后者是指向数组的指针。更详细地说。
