@@ -300,6 +300,8 @@ int *ptr;
 ptr++;  // 每次移动sizeof(int)
 ```
 
+TODO ptr加加减减和sizeof()具体分析
+
 ## 函数指针
 函数指针是指向函数的指针变量。
 ```
@@ -362,7 +364,46 @@ void *realloc(void *address, int newsize);
 // void * 类型表示未确定类型的指针。C、C++ 规定 void * 类型可以通过类型转换强制转换为任何其它类型的指针。
 ```
 
-# 函数
+## ``calloc()``分析
+**功能**
+The calloc interface is presented as allocating an array of nelems elements each of size elemsz bytes. 
+
+**区别``malloc()``**
+It **initializes the memory contents to zero**, which is the feature that distinguishes ``calloc`` from ordinary ``malloc``.
+
+**代码分析**
+```C
+1   void *musl_calloc(size_t nelems, size_t elemsz) {
+2       if (nelems && elemsz > SIZE_MAX / nelems) {
+3           return NULL;
+4       }
+5       size_t total = nelems * elemsz;
+6       void *p = malloc(total);
+7       if (p != NULL) {
+8           long *wp;
+9           size_t nw = (total + sizeof(*wp) - 1) / sizeof(*wp);
+10          for (wp = p; nw != 0; nw--, wp++) {
+11              *wp = 0;
+12          }
+13      }
+14      return p;
+15  }
+
+```
+- allocates a region og total size ``nelems * elemsz``(所以1，20/4，5 结果是一样的)
+- 2~4判断是否有足够的内存空间，不用``elemsz * nelems > SIZE_MAX`` 我推断是因为可能得到很大的数，即使是``size_t``也爆炸了
+- Line 6 declares p to be of type ``void*``, which matches the return type of malloc. A ``void*`` pointer is a generic pointer. It stores an address, but makes no claim about the type of the pointee. It is illegal to dereference or do pointer arithmetic on a ``void*``, since both of these operations depend on the type of the pointer, which is not known in this case. However, ``void *`` can be assigned to/from without an explicit cast.
+- line 7~12在初始化
+- Line 9 contains the expression ``sizeof(*wp)``. Given that wp was declared and not assigned, this looks to dereference an uninitialized pointer! Not to fear, it turns out that sizeof is evaluated at compile-time by working out the size for an expression from its declared type. Since wp was declared as a ``long *``, the expression ``*wp`` is of type long which on Myth systems has size 8 bytes. The compiler will have transformed it into ``(total + 8 - 1)/8``. Phew! There will be no nasty runtime surprises.
+- 同时line9暴露了一个隐藏属性，``malloc()``and ``calloc()``都会向上rounding,也就是按照8的倍数ceiling
+
+> musl libc
+> https://www.musl-libc.org/
+> a new standard library to power a new generation of Linux-based devices. musl is lightweight, fast, simple, free, and strives to be correct in the sense of standards-conformance and safety.
+
+# stdlib
+https://web.stanford.edu/class/archive/cs/cs107/cs107.1202/guide/stdlib.html
+
 ## ``error()``
 ## ``strtol()``
 参考： http://www.runoob.com/cprogramming/c-function-strtol.html
@@ -389,4 +430,24 @@ C 库函数 ``long int strtol(const char *str, char **endptr, int base)`` 把参
 - d) int (*a)[4];表示一个内存空间，这个空间用来存放一个指针，这个指针指向一个长度为4、类型为int的数组；和int** a的区别在于，++、+=1之后的结果不一样，其他用法基本相同。
 - 以上四种类型见上图表示。
 - e) int (*a)(int);表示一个内存空间，这个空间用来存放一个指针，这个指针指向一个函数，这个函数有一个类型为int的参数，并且函数的返回类型也是int。
-- f)int *p[]和int (*p)[]; 前者是指针数组，后者是指向数组的指针。更详细地说。
+- f)int ``*p[]``和``int (*p)[]``; 前者是指针数组，后者是指向数组的指针。更详细地说。
+
+
+
+## ``<stdio.h>`` standard input/output
+### File operations
+``fopen()``, ``fclose()``
+
+- ``FILE *fopen(const char *filename, const char *mode)``
+	- fopen opens a file with the given filename and mode,  Returns a file pointer or NULL on failure.
+	- "w":write; "r":read; "a":append
+- ``int fclose(FILE *fp)``
+	- close a file pointer and free any memory(stdout清空,就会立刻输出所有在缓冲区的内容)
+- ``int fflush(FILE *fp)``
+	- flushes any buffered writes on a file pointer out to console/disk. The return value is 0 (success) or EOF (faliure)
+
+### Reading, input
+- ``char *fgets(char buf[], int buflen, FILE *fp)``
+	- reads the next line of text from the given file pointer. Characters are read from the file, **stopping at the first newline or EOF or after buflen-1 characters**. (有三种情况，EOF,'\n'(\n会被包含进去),buflen)
+	- The characters are written to buf, which is expected to have sufficient memory to store buflen characters (including null terminator). **The return value is the address of first char in buf on success, NULL is returned on EOF or error.**
+	- ``fget()`` 函数中的 buflen 如果小于字符串的长度，那么字符串将会被截取；如果 buflen 大于字符串的长度则多余的部分系统会自动用 '\0' 填充。

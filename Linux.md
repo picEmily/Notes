@@ -116,3 +116,26 @@ ipcs [-m|-q|-s]
 ipcrm -m|-q|-s shm_id
 %ipcrm -m 105
 ```
+
+# filter command
+
+- ``cat``
+	- ``cat -b``: show line number
+- ``less``
+- ``head`` outputs the first lines of the input
+- ``tail`` outputs the last lines of the input
+- ``wc`` outputs the count of lines, words, and characters in the input
+- ``grep`` outputs lines from the input that match the search pattern
+- ``uniq`` filters out adjacent duplicate lines from the input
+- ``sort`` outputs the input rearranged into sorted order	
+
+**Notes**
+read from a named file or stadard input
+**control-d is used to signal EOF.**
+
+> The Unix philosophy is to move away from the construction of monolithic do-everything programs and instead encourage a proliferation of **smaller commands**, each focused and streamlined to perform one task well. Those small, discrete tools are combined to accomplish larger tasks.
+
+**pipelines**
+- ``grep include util.c | wc -l`` finds lines in util.c containing "include", and feeds them to wc, which outputs the number of lines in its received input. This pipeline thus reports the count of matches.
+- ``cat -b util.c | tail`` outputs the lines of util.c labeled with line numbers, and feeds them to tail, which outputs only the last 10 lines and numbers.
+- The standard uniq command only filters out duplicate lines if they are **adjacent in the input**, while your version will filter out duplicate lines appearing anywhere in the input. For this reason, with the standard uniq command, if instead your data has duplicate lines scattered throughout, you need to first rearrange them so duplicates are adjacent for uniq to detect them. We can use a three-stage pipeline to output the count of distinct lines in a file: ``sort samples/names | uniq | wc -l``. First, sort outputs the sorted lines in samples/names and feeds them to uniq, which outputs out all the lines, omitting adjacent duplicates, to wc, which outputs the number of lines in its received input.

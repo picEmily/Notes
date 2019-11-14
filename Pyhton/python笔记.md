@@ -458,3 +458,39 @@ exit(self, exc_type, exc_val, exc_tb)
 
 # exit:with代码执行结束后，会执行__exit__。
 ```
+
+# Python 内置函数的一些复杂度
+ [len()](https://stackoverflow.com/questions/1115313/cost-of-len-function)  在CPython下是O(1) 
+
+官方文档：
+https://wiki.python.org/moin/TimeComplexity
+
+# 匿名函数
+
+**lambda**
+lambda是一定有返回值对象的，但是如果不用的话，会马上被丢弃
+
+```python
+# 基本用法
+# lambda arg1, arg2 ... : expression
+fn = lambda n1, n2 : n1 + n2
+sum1 = fn(1,2)  # 3
+sum2 = fn(0,3)  # 3
+```
+
+```python
+# use in collections
+
+# a dict sort by value
+# 解释：key参数表示被比较的对象
+d = {xxxxxxxx}
+sorted(d, key = lambda d : d[1], reverse = False)
+
+# 作为list的对象
+l = [lambda a: a**3, lambda b: b**2]
+f1 = l[0]
+f2 = l[1]
+f1(2)  # 8
+f2(3)  # 9
+
+```

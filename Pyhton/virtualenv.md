@@ -9,6 +9,8 @@ virtualenv venv
 source venv/bin/activate
 (venv)
 deactivate
+
+virtualenv -python=python3 venv
 ```
 
 ## in win
