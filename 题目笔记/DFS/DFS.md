@@ -4,6 +4,9 @@
 给定一个数字列表，返回其所有可能的排列。
 
 ## 题目分析
+求出所有路径问题
+看成图的话，某个节点的neighbor是unvisited所有元素
+
 背下来就好啦~
 官方答案的话不是用的set，而是维护了一个visited数组，每一位代表一个数
 
@@ -393,7 +396,7 @@ class Solution:
             path.pop()
 
 ```
-加入不怕重复的话可以这样写，体会一下区别
+假如不怕重复的话可以这样写，体会一下区别
 ```python
 class Solution:
     """
@@ -418,15 +421,148 @@ class Solution:
         self.dfs(nums, result, path, start+1)
 ```
 
-# [名字]
+# dfs遍历树: 路径总和
 ## 题目描述
+1357
+给定一个二叉树和一个目标和，找到所有从根节点到叶子节点路径总和等于给定目标和的路径。
+```
+输入: root = {5,4,8,11,#,13,4,7,2,#,#,5,1}, sum = 22
+              5
+             / \
+            4   8
+           /   / \
+          11  13  4
+         /  \    / \
+        7    2  5   1
+输出: [[5,4,11,2],[5,8,4,5]]
+```
+
 ## 题目分析
+就，找所有路径问题，但是终点是所有叶子节点而不是某个节点
+
 ## 题目解答
+```python
+"""
+Definition of TreeNode:
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left, self.right = None, None
+"""
+
+class Solution:
+    """
+    @param root: a binary tree
+    @param sum: the sum
+    @return: the scheme
+    """
+    def pathSum(self, root, sum):
+        # 1. 树只用考虑两个邻居，left and right
+        # 2. 树不需要考虑visited，因为是单向的图
+        result = []
+        ret = []
+        self.dfs(sum, [root], result)
+        for r in result:
+            r = [ele.val for ele in r]
+            ret.append(list(r))
+        return ret
+            
+    def dfs(self, sum, path, result):
+        if path[-1].left is None and path[-1].right is None:
+            # 已经遍历到子叶节点，检查和
+            if self.get_sum(path) == sum:
+                # print([ele.val for ele in path])
+                result.append(list(path))
+                return 
+        
+        # neighbor is left and right node
+        if path[-1].left:
+            path.append(path[-1].left)    
+            self.dfs(sum, path, result)
+            path.pop()
+        if path[-1].right:
+            path.append(path[-1].right)
+            self.dfs(sum, path, result)
+            path.pop()
+        
+            
+    def get_sum(self, nums):
+        ret = 0
+        for n in nums:
+            ret += n.val
+        return ret
+```
 
 
-# [名字]
+# 单词搜索
 ## 题目描述
+123
+给出一个二维的字母板和一个单词，寻找字母板网格中是否存在这个单词。
+单词可以由按顺序的相邻单元的字母组成，其中相邻单元指的是水平或者垂直方向相邻。每个单元中的字母最多只能使用一次。
+
+```
+输入：["ABCE","SFCS","ADEE"]，"ABCCED"
+输出：true
+解释：
+[    
+     A B C E
+     S F C S 
+     A D E E
+]
+(0,0)A->(0,1)B->(0,2)C->(1,2)C->(2,2)E->(2,1)D
+```
+
 ## 题目分析
+只用找到一个合法答案的dfs题
+属于最容易理解的从图中找到一条路径的类别
+
+return值的理解：
+我个人写dfs不喜欢return，但是不return更适合做全搜索
+这一题只需要回答True或者False，所以return True或者False，避免找到答案了以后还继续搜索
+
 ## 题目解答
+```python
+class Solution:
+    """
+    @param board: A list of lists of character
+    @param word: A string
+    @return: A boolean
+    """
+    direction = set([(0,-1),(0,1),(1,0),(-1,0)])
+    def exist(self, board, word):
+        # Boundary Condition
+        if word == []:
+            return True
+        m = len(board)
+        if m == 0:
+            return False
+        n = len(board[0])
+        if n == 0:
+            return False
+            
+        # Visited Matrix all false
+        visited = [[False for j in range(n)] for i in range(m)]
+        
+        for i in range(m):
+            for j in range(n):
+                if self.helper(board, word, visited, i, j):
+                    return True
+        return False
+    
+    def helper(self, board, word, visited, row, col):
+        if word == '':
+            return True
+        m, n = len(board), len(board[0])
+        if row < 0 or row >= m or col < 0 or col >= n:
+            return False
+        if board[row][col] == word[0] and not visited[row][col]:
+            visited[row][col] = True
+            for dir in self.direction:
+                if self.helper(board, word[1:], visited, row+dir[0], col+dir[1]):
+                    return True
+            visited[row][col] = False
+        
+        return False
+```
 
 
