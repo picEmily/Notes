@@ -36,6 +36,21 @@ https://www.infoq.cn/article/3-simple-tricks-for-smaller-docker-images
 
 对于``requirements``，用``pip install --no-cache-dir --no-deps -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt``，这个是我用``pip freeze``导出的依赖，所有要用的都会在里面的，所以不要``--ignore-installed``
 
+## 小坑
+shebang line不需要，由两种，可以都试试
+```
+#!/bin/sh
+#!/usr/bin/env python
+```
+
+mysql在本地
+https://stackoverflow.com/questions/28056522/access-host-database-from-a-docker-container
+```
+当在docker容器内部执行ifconfig后，会获得*.*.*.2，这个ip地址，在宿主机上执行ifconfig，会有docker0这个网桥，宿主机和docker容器就是通过这个docker0网桥进行通信的，宿主机在此网桥上的ip地址为*.*.*.1，和上述的*.*.*.2只是最后一个数字不同；
+
+监听地址需改为127.0.0.1 不再是127.0.0.0
+```
+
 ## 例子
 ```python3
 FROM harbor.shannonai.com/public/inf-pytorch:v0.0.1

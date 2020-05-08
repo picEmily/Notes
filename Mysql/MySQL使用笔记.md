@@ -1,4 +1,21 @@
 # Mysql 学习笔记
+十分详细的配置过程
+https://support.rackspace.com/how-to/install-mysql-server-on-the-ubuntu-operating-system/
+
+其中需要补充的是：
+- bind-address 只能有一个（我设为0.0.0.0）
+- 为了能远程访问，需要增加用户的远程放问功能
+
+```
+use mysql;
+select host from user where user='guest';
+update user set host ='%' where user ='researchlink';
+FLUSH PRIVILEGES;
+```
+
+Docker容器内连接宿主机的Mysql服务器
+https://www.jianshu.com/p/3e1fd311ba87
+
 ## 下载
 ### 下载
 https://www.cnblogs.com/reyinever/p/8551977.html
@@ -141,6 +158,23 @@ def register():
 	db.session.commit()
 ```
 
+python3 mysql k坑
+```
+sudo apt-get install python3-mysqldb
+pip install pymysql
+```
+连接数据库:一定要mysql+pymysql
+```
+## app.py
+import pymysql 
+```
+```
+class Config():
+	SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://researchlink:researchlink@127.0.0.1:3306/researchlink'
+```
+
+
+
 # Cheat sheet
 ```bash
 ## ubuntu 18 lts
@@ -282,6 +316,9 @@ https://learnku.com/articles/20628#2a302f
 https://blog.csdn.net/chaigang/article/details/82350399
 
 坑：不要用powershell
+
+# 错误排查
+https://blog.csdn.net/zhj082/article/details/80783883
 
 
 

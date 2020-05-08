@@ -4,8 +4,8 @@
 sudo apt-get install python-pip
 pip install virtualenv
 virtualenv --version
-sudo apt install virtualenv
-virtualenv venv
+sudo apt install virtualenv(似乎不需要)
+virtualenv -p python3 venv
 source venv/bin/activate
 (venv)
 deactivate

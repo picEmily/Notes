@@ -292,3 +292,31 @@ https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_l
 可以自己再login_manager中配置
 
 ### 自己写login并处理session
+
+## flask migrate
+https://www.jianshu.com/p/e4fc86fa21e8
+
+修改库，表，想要保留原来的数据
+
+第一次
+```
+flask db init
+flask db migrate -m''
+flask db upgrade
+```
+
+修改了库，表
+```
+flask db migrate
+flask db upgrade
+```
+
+没有尝试过，大概会回滚
+```
+flask db migrate
+flask db downgrade
+```
+
+---补充---
+sqlite直接用migrate drop列会出问题，因为sqlite不能直接用``ALTER TABLE "Post" DROP COLUMN language``
+

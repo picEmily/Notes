@@ -170,3 +170,8 @@ sudo service mysql start
 ## 远程开发
 https://zhuanlan.zhihu.com/p/49227132
 Pycharm 配置远程Python环境
+
+wsl的路径
+``\\wsl$``
+
+https://www.cnblogs.com/lepeCoder/p/wsl_dir.html
