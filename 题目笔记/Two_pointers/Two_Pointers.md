@@ -4,6 +4,31 @@
 	- 链表类
 - left，right指针（两边同时向中间移动，中间同时向两边移动）
 
+# 两数之和 two sum
+## 题目描述
+没有排序的数组
+给一个数组和一个target，返回index满足两数之和为target
+
+## 题目分析
+两指针在这一题适合排序数组，但是那样就会打乱index，所以不适合这一题，还是用map
+
+## 题目解答
+```python
+def twoSum(self, nums: List[int], target: int) -> List[int]:
+	# hashmap 法
+	m = {}
+	size = len(nums)
+	ret = []
+	for i in range(size):
+	    if target-nums[i] in m:
+	        ret.append(m[target-nums[i]])
+	        ret.append(i)
+	        break
+	    else:
+	        m[nums[i]] = i
+	return ret
+```
+
 # 链表的中点
 ## 题目描述
 228.找链表的中点
@@ -155,10 +180,11 @@ class Solution:
         left, right = 0, 0
         while right < len(nums):
             if nums[right] != 0:
+			# 要么left，right都不指向零
+			# 要么left指向0，right不指向零，那么此时swap会把0换到靠右的right指针处
                 nums[left], nums[right] = nums[right], nums[left]
                 left += 1
             right += 1
-
 ```
 
 # 去除重复元素
@@ -458,6 +484,7 @@ class Solution:
 这就是快排的基本型
 背下来就好
 单纯的一次partition是O(N)时间复杂度和O(1)空间复杂度的
+``return start`` 得到pivot的位置
 
 ## 题目解答
 ```python
@@ -490,6 +517,8 @@ class Solution:
 数组是未排序的，也就是说只能遍历一次，而且又不能专门拿个东西存
 
 又是partition的应用了，就是经过多次partition后让pivot成为第len(A) - k个数字（第k大）
+
+topK问题用堆来实现
 
 ## 题目解答
 ```python

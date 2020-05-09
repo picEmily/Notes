@@ -106,34 +106,72 @@ class mergeSort(object):
 
 ```python
 class Solution():
-	def heapify(self, nums):
-		for i in range(len(nums) // 2, -1, -1):
-			self.siftdown(nums, i)
+    def heap_sort(self, nums):
+        self.heapify(nums)
+        # 从小到大排序需要大根堆
+        n = len(nums)
+        for i in range(n):
+            # 首尾交换，这样末尾是最大数
+            nums[0], nums[n-i-1] = nums[n-i-1], nums[0]
+            # heapify
+            self.siftdown(nums, 0, n-i-1)
 
-	def siftdown(self, nums, index):
-		n = len(nums)
-		while index < n:
-			min_index = index	
-			left = index * 2 + 1
-			right = index * 2 + 2
-			if left < n and nums[left] > nums[min_index]:
-				min_index = left	
-			if left < n and nums[right] > nums[min_index]:
-				min_index = right
-			
-			if index == min_index:
-				break
-			nums[index], nums[min_index] = nums[min_index], nums[index]
-			index = min_index
-
-	def heap_sort(self, nums):
-		self.heapify(nums):
-		length = len(nums)
-		for i in range(length-1):
-			# 1. 收尾交换
-			nums[0], nums[length-i] = nums[length-i], nums[0]
-			# 2. siftdown,末尾的大数已经排好序不用管了
-			self.siftdown(nums[-(length-i)], 1)
-		
-		return nums
+    def heapify(self, nums):
+        for i in range(len(nums) // 2, -1, -1):
+            self.siftdown(nums, i, len(nums))
+        
+    def siftdown(self, nums, start, end):
+        # O(h) 即 O(logN)
+        n = end
+        index = start
+        while index < n:
+            # 把nums[index]往下移动，不能比子节点小
+            # 若比子节点小，则和左右中大的那个交换
+            max_index = index
+            left = index*2 + 1
+            right = index*2 + 2
+            if left < n and nums[left] > nums[max_index] :
+                max_index = left
+            if right < n and nums[right] > nums[max_index]:
+                max_index = right
+                
+            if max_index != index:
+                nums[max_index], nums[index] = nums[index], nums[max_index]
+                index = max_index
+            else:
+                break
 ```
+
+```python
+# 仅仅只是堆化的话
+class heap(object):
+	def heapify(self, nums):
+	    for i in range(len(nums) // 2, -1, -1):
+	        self.siftdown(nums, i)
+	    
+	def siftdown(self, nums, index):
+	    # O(h) 即 O(logN)
+	    n = len(nums)
+	    while index < n:
+	        # 把nums[index]往下移动，不能比子节点小
+	        # 若比子节点小，则和左右中大的那个交换
+	        max_index = index
+	        left = index*2 + 1
+	        right = index*2 + 2
+	        if left < n and nums[left] > nums[max_index] :
+	            max_index = left
+	        if right < n and nums[right] > nums[max_index]:
+	            max_index = right
+	            
+	        if max_index != index:
+	            nums[max_index], nums[index] = nums[index], nums[max_index]
+	            index = max_index
+	        else:
+	            break
+
+def main():
+	H = heap()
+	H.heapify([3,2,1])
+```
+
+# 链表排序
