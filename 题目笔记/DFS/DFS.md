@@ -3,6 +3,8 @@
 15
 给定一个数字列表，返回其所有可能的排列。
 
+假设没有重复元素
+
 ## 题目分析
 求出所有路径问题
 看成图的话，某个节点的neighbor是unvisited所有元素
@@ -36,6 +38,42 @@ class Solution:
             self.dfs(nums, result, path, unvisited)
             path.pop()
             unvisited.add(ele)
+```
+
+# 带重复元素的排列
+## 题目描述
+16. 
+给出一个具有重复数字的列表，找出列表所有不同的排列。
+
+## 题目分析
+
+## 题目解答
+```python
+    def permuteUnique(self, nums):
+        res = []
+        visited = [0] * len(nums)
+        nums = sorted(nums)
+        self.dfs(nums, res, [], visited)
+        return res
+
+    def dfs(self, nums, res, path, visited):
+        if len(path) == len(nums):
+            # base case
+            res.append(list(path))
+            return
+        
+        for i in range(len(nums)):
+            if visited[i]:
+                continue
+            # 去重
+            if i >= 1 and nums[i] == nums[i-1] and not visited[i-1]:
+                continue
+            
+            path.append(nums[i])
+            visited[i] = 1
+            self.dfs(nums, res, path, visited)
+            visited[i] = 0
+            path.pop()
 ```
 
 # 分割字符串Split String
@@ -90,6 +128,7 @@ class Solution:
 
 # 电话号码的字母组合  · Letter Combinations of a Phone Number
 ## 题目描述
+425
 给一个不包含'0'和'1'的数字字符串，每个数字代表一个字母，请返回其所有可能的字母组合。
 
 下图的手机按键图，就表示了每个数字可以代表的字母。
@@ -358,6 +397,7 @@ class Solution:
 
 # 子集2
 ## 题目描述
+18
 给定一个可能具有重复数字的列表，返回其所有可能的子集。
 
 ## 题目分析
@@ -464,6 +504,7 @@ class Solution:
         self.dfs(sum, [root], result)
         for r in result:
             r = [ele.val for ele in r]
+			# r = map(lambda x: x.val, r)
             ret.append(list(r))
         return ret
             
@@ -557,7 +598,7 @@ class Solution:
             return False
         if board[row][col] == word[0] and not visited[row][col]:
             visited[row][col] = True
-            for dir in self.direction:
+            for dir in Solution.direction:
                 if self.helper(board, word[1:], visited, row+dir[0], col+dir[1]):
                     return True
             visited[row][col] = False
@@ -565,4 +606,93 @@ class Solution:
         return False
 ```
 
+# 二叉树的最小深度
+## 题目描述
+155
+给定一个二叉树，找出其最小深度。
+
+二叉树的最小深度为根节点到最近叶子节点的最短路径上的节点数量。
+```python
+样例
+样例 1:
+
+输入: {}
+输出: 0
+样例 2:
+
+输入:  {1,#,2,3}
+输出: 3	
+解释:
+	1
+	 \ 
+	  2
+	 /
+	3    
+它将被序列化为 {1,#,2,3}
+样例 3:
+
+输入:  {1,2,3,#,#,4,5}
+输出: 2	
+解释: 
+      1
+     / \ 
+    2   3
+       / \
+      4   5  
+它将被序列化为 {1,2,3,#,#,4,5}
+```
+
+## 题目分析
+
+
+## 题目解答
+```python
+# 分治法，偷懒
+class Solution:
+    """
+    @param root: The root of binary tree
+    @return: An integer
+    """
+    def minDepth(self, root):
+        if not root: 
+            return 0
+        if not root.left and not root.right:
+            return 1
+        if root.left and not root.right:
+            return self.minDepth(root.left) + 1
+        if root.right and not root.left:
+            return self.minDepth(root.right) + 1
+        
+        return min(self.minDepth(root.left) + 1, self.minDepth(root.right) + 1)
+```
+
+```
+# 格式化dfs写法
+class Solution:
+    """
+    @param root: The root of binary tree
+    @return: An integer
+    """
+    def minDepth(self, root):
+        if not root:
+            return 0
+        height = []
+        self.dfs(root, 0, height)
+        return min(height)
+        
+    def dfs(self, node, path_len, height):
+        if not node.left and not node.right:
+            path_len += 1
+            height.append(path_len)
+            return
+        
+        if node.left:
+            path_len += 1
+            self.dfs(node.left, path_len, height)
+            path_len -= 1
+        if node.right:
+            path_len += 1
+            self.dfs(node.right, path_len, height)
+            path_len -= 1
+```
 

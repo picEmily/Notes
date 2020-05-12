@@ -1,4 +1,37 @@
-# C++ 是如何实现set和map的？
+# Sequence Containers
+```c++
+std::vector<T>
+std::deque<T>
+std::list<T>
+std::array<T>
+std::forward_list<T>
+```
+
+- list不是连续存储的，链表
+- deque是分段数组，也不是连续存储的，每一段大小恒定
+- vector是连续存储的，顺序访问速度更快
+
+## Container Adapters
+```c++
+std::Stack
+std::Queue
+```
+- 基于deque实现（看文档）
+
+# Associated Containers
+```c++
+std::map<T1, T2> 
+std::set<T> 
+std::unordered_map<T1, T2> 
+std::unordered_set<T>
+```
+
+- 没有sequence，通过key访问数据
+	- set可以看成没有key的map
+- map/set通过key排序
+- unordered_map<T1, T2>，std::unordered_set<T> 通过**hash**
+
+## C++ 是如何实现set和map的？
 Q:
 - STL中类似map，set的数据结构一共有几种？各自有什么特性？
 - 它们是怎么实现的？
@@ -66,3 +99,4 @@ https://www.cnblogs.com/skywang12345/p/3245399.html
 	- collision 用链表处理
 
 > Python 中的set和map是 unordered，所以是用hash实现的
+
