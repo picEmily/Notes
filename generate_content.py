@@ -23,14 +23,14 @@ def generate_tree(path, ignore_path=None, n=0):
         if ignore_path and path.name in ignore_path:
             return
 
-        url = BASE_FILE_URL + str(path.relative_to(BASE_DIR))
+        url = BASE_FILE_URL + fix_name(str(path.relative_to(BASE_DIR)))
         tree_str += '........|' * n + '-' * 4 + '[' + path.name + ']' + '(' + url + ')' + '  \n'
     elif path.is_dir():
         # ignore all file in the ignore_path
         if ignore_path and path.name in ignore_path:
             return
         
-        url = BASE_DIR_URL + str(path.relative_to(BASE_DIR))
+        url = BASE_DIR_URL + fix_name(str(path.relative_to(BASE_DIR)))
         tree_str += '........|' * n + '-' * 4 + '[' + path.name + ']' + '(' + url + ')' + '\\' + '  \n'
         for subpath_it in path.iterdir():
             generate_tree(subpath_it, ignore_path, n+1)
@@ -40,9 +40,18 @@ def save_file(tree_str, filename="README.md"):
     with open(filename, 'w', encoding='utf-8') as f:
         f.write(tree_str)
 
+def fix_name(name):
+    """
+    If the file name conatains space, github can't render it properly
+    Replace space with '-'
+    """
+    new_name = name.replace(' ', '-')
+    return new_name
+
+
 if __name__ == "__main__":
     generate_tree(BASE_DIR, ignore_path=IGNORE, n=0)
-    print(tree_str)
+    # print(tree_str)
     save_file(tree_str)
 
 
