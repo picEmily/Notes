@@ -24,14 +24,14 @@ def generate_tree(path, ignore_path=None, n=0):
             return
 
         url = BASE_FILE_URL + str(path.relative_to(BASE_DIR))
-        tree_str += '........|' * n + '-' * 4 + '[' + path.name + ']' + '(' + url + ')' + '\n'
+        tree_str += '........|' * n + '-' * 4 + '[' + path.name + ']' + '(' + url + ')' + '  \n'
     elif path.is_dir():
         # ignore all file in the ignore_path
         if ignore_path and path.name in ignore_path:
             return
         
         url = BASE_DIR_URL + str(path.relative_to(BASE_DIR))
-        tree_str += '........|' * n + '-' * 4 + '[' + path.name + ']' + '(' + url + ')' + '\\' + '\n'
+        tree_str += '........|' * n + '-' * 4 + '[' + path.name + ']' + '(' + url + ')' + '\\' + '  \n'
         for subpath_it in path.iterdir():
             generate_tree(subpath_it, ignore_path, n+1)
 
@@ -42,6 +42,7 @@ def save_file(tree_str, filename="README.md"):
 
 if __name__ == "__main__":
     generate_tree(BASE_DIR, ignore_path=IGNORE, n=0)
+    print(tree_str)
     save_file(tree_str)
 
 
