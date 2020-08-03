@@ -45,7 +45,7 @@ def fix_name(name):
     If the file name conatains space, github can't render it properly
     Replace space with '-'
     """
-    new_name = name.replace(' ', '-')
+    new_name = name.replace(' ', '%20')
     return new_name
 
 
