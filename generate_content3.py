@@ -93,9 +93,9 @@ def tree_to_html(root):
 
         # create tag
         new_tag_p = soup.new_tag(
-            "p", style="margin-left:{}%".format(str(MARGIN)), id=root.name["url"])
+            "p", id=root.name["url"])
         new_tag_a = soup.new_tag("a", href=root.name["url"])
-        new_tag_a.string = '|' + root.level*'--' + root.name["name"]
+        new_tag_a.string = root.name["name"]
 
         # generate nested tags
         parent_tag = soup.find(id=root.parent.name["url"])
@@ -110,16 +110,17 @@ def tree_to_html(root):
         """
 
         # create tag
-        new_tag_details = soup.new_tag(
-            "details", style="margin-left:{}%".format(str(MARGIN)), id=root.name["url"])
+        new_tag_details = soup.new_tag("details")
+        new_tag_blockquote = soup.new_tag("blockquote", id=root.name["url"])
         new_tag_summary = soup.new_tag("summary")
         new_tag_a = soup.new_tag("a", href=root.name["url"])
-        new_tag_a.string = '|' + root.level*'--' + root.name["name"]
+        new_tag_a.string = root.name["name"]
 
         # generate nested tags
         parent_tag = soup.find(id=root.parent.name["url"])
         new_tag_summary.append(new_tag_a)
         new_tag_details.append(new_tag_summary)
+        new_tag_details.append(new_tag_blockquote)
         parent_tag.append(new_tag_details)
 
         for n in root.children:
