@@ -32,7 +32,7 @@ BASE_FILE_URL = BASE_URL + "/blob/master/"
 BASE_DIR_URL = BASE_URL + "/tree/master/"
 IGNORE = [".git", "__pycache__", ".gitignore",
           ".pytest_cache", "电脑修复", "梯子", ".vscode"]
-MARGIN = 3
+MARGIN = 25
 
 soup = BeautifulSoup("", features="html.parser")
 
@@ -89,7 +89,7 @@ def tree_to_html(root):
 
         # create tag
         new_tag_p = soup.new_tag(
-            "p", style="margin-left:{}%".format(str(MARGIN)), id=root.name["url"])
+            "p", style="margin-left:{}px".format(str(MARGIN)), id=root.name["url"])
         new_tag_a = soup.new_tag("a", href=root.name["url"])
         new_tag_a.string = root.name["name"]
 
@@ -107,7 +107,7 @@ def tree_to_html(root):
 
         # create tag
         new_tag_details = soup.new_tag(
-            "details", style="margin-left:{}%".format(str(MARGIN)), id=root.name["url"])
+            "details", style="margin-left:{}px".format(str(MARGIN)), id=root.name["url"])
         new_tag_summary = soup.new_tag("summary")
         new_tag_a = soup.new_tag("a", href=root.name["url"])
         new_tag_a.string = root.name["name"]
