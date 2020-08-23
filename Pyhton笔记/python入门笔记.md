@@ -58,7 +58,7 @@ def do_twice(func):
     return wrapper_do_twice
 
 @do_twice
-def say_whee():
+def say_whee():		# say_whee = do_twice(say_whee)
     print("Whee!")
 ```
 
@@ -87,7 +87,7 @@ def do_twice(func):
 @do_twice
 def return_greeting(name):
     print("Creating greeting")
-    return f"Hi {name}"s
+    return f"Hi {name}"
 ```
 
 Introspection

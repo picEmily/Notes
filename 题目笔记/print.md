@@ -1,0 +1,601 @@
+# 排序
+## 题目描述
+O(nlogn) 排序算法：
+- quick sort
+- merge sort
+- heap sort
+
+## 题目分析
+没啥分析的，背下来就好了
+
+## 题目解答
+**quick sort**
+要点写在注释里面
+
+```python
+class Solution:
+    # @param {int[]} A an integer array
+    # @return nothing
+    def sortIntegers2(self, A):
+        # Write your code here
+        self.quickSort(A, 0, len(A) - 1)
+    
+    def quickSort(self, A, start, end):
+        if start >= end:
+            return
+        
+        left, right = start, end
+
+        # key point 1: pivot is the value, not the index
+        pivot = A[(start + end) // 2];
+
+        # key point 2: every time you compare left & right, it should be 
+        # left <= right not left < right
+		# bad case for left < right: [1,2]
+
+        while left <= right:
+            while left <= right and A[left] < pivot:
+                left += 1
+            
+            while left <= right and A[right] > pivot:
+                right -= 1
+            
+            if left <= right:
+                A[left], A[right] = A[right], A[left]
+                
+                left += 1
+                right -= 1
+        
+        self.quickSort(A, start, right)
+        self.quickSort(A, left, end)
+```
+
+**merge sort 归并排序**
+```python
+class mergeSort(object):
+    def __init__(self,nums):
+        self.A = nums
+        size = len(self.A)
+        self.temp = [0 for _ in range(size)]
+        self.sort(0,size-1)
+
+        
+    def sort(self,start,end):
+        if start >= end:
+            return 
+        mid = start + (end-start)/2
+        self.sort(start,mid)
+        self.sort(mid+1,end)
+        self.merge(start,end)
+        
+    def merge(self,start,end):
+        mid = start + (end-start)/2
+        l,r = start,mid+1
+        index = start
+        while l<=mid and r<=end:
+            if self.A[l] < self.A[r]:
+                self.temp[index] = self.A[l]
+                index += 1
+                l += 1
+            else:
+                self.temp[index] = self.A[r]
+                index += 1
+                r += 1
+        while l<=mid:
+            self.temp[index] = self.A[l]
+            index += 1
+            l += 1
+        while r<=end:
+            self.temp[index] = self.A[r]
+            index += 1
+            r += 1
+        for i in range(start,end+1):
+            self.A[i] = self.temp[i]
+```
+
+## 堆排序
+- heapify: O(N)
+- insert/remove: O(logN)
+- heapsort: O(NlogN)
+
+原位排序，无额外空间复杂度. 从小到大排序用**大根堆**
+1. 创建一个堆 H[0……n-1]；
+1. 把堆首（最大值）和堆尾互换；
+1. 把堆的尺寸缩小 1，并调用 shift_down(0)，目的是把新的数组顶端数据调整到相应位置；
+1. 重复步骤 2，直到堆的尺寸为 1。
+
+```python
+class Solution():
+    def heap_sort(self, nums):
+        self.heapify(nums)
+        # 从小到大排序需要大根堆
+        n = len(nums)
+        for i in range(n):
+            # 首尾交换，这样末尾是最大数
+            nums[0], nums[n-i-1] = nums[n-i-1], nums[0]
+            # heapify
+            self.siftdown(nums, 0, n-i-1)
+
+    def heapify(self, nums):
+        for i in range(len(nums) // 2, -1, -1):
+            self.siftdown(nums, i, len(nums))
+        
+    def siftdown(self, nums, start, end):
+        # O(h) 即 O(logN)
+        n = end
+        index = start
+        while index < n:
+            # 把nums[index]往下移动，不能比子节点小
+            # 若比子节点小，则和左右中大的那个交换
+            max_index = index
+            left = index*2 + 1
+            right = index*2 + 2
+            if left < n and nums[left] > nums[max_index] :
+                max_index = left
+            if right < n and nums[right] > nums[max_index]:
+                max_index = right
+                
+            if max_index != index:
+                nums[max_index], nums[index] = nums[index], nums[max_index]
+                index = max_index
+            else:
+                break
+```
+
+```python
+# 仅仅只是堆化的话
+class heap(object):
+	def heapify(self, nums):
+	    for i in range(len(nums) // 2, -1, -1):
+	        self.siftdown(nums, i)
+	    
+	def siftdown(self, nums, index):
+	    # O(h) 即 O(logN)
+	    n = len(nums)
+	    while index < n:
+	        # 把nums[index]往下移动，不能比子节点小
+	        # 若比子节点小，则和左右中大的那个交换
+	        max_index = index
+	        left = index*2 + 1
+	        right = index*2 + 2
+	        if left < n and nums[left] > nums[max_index] :
+	            max_index = left
+	        if right < n and nums[right] > nums[max_index]:
+	            max_index = right
+	            
+	        if max_index != index:
+	            nums[max_index], nums[index] = nums[index], nums[max_index]
+	            index = max_index
+	        else:
+	            break
+
+def main():
+	H = heap()
+	H.heapify([3,2,1])
+```
+
+# 链表排序
+
+# 翻转链表
+
+## 题目描述
+35
+原位反转链表
+
+## 题目分析
+没啥好说的，背下来，需要**两个**临时节点
+
+翻转时候的状态
+此状态下：
+1. ``tmp = head.next``
+1. ``head.next = curt``
+1. ``curt = head``
+1. ``head = tmp``
+
+```
+2->1
+↑  ↓
+curt
+
+head
+ ↓
+ 3->4->5->null 
+ ↑ 
+tmp
+```
+
+## 题目解答
+```python
+# 我的思路是递归
+"""
+Definition of ListNode
+
+class ListNode(object):
+
+    def __init__(self, val, next=None):
+        self.val = val
+        self.next = next
+"""
+
+class Solution:
+    """
+    @param head: n
+    @return: The new head of reversed linked list.
+    """
+    def reverse(self, head):
+        if head.next is None:
+            // base case
+            return head
+            
+        temp_tail = head
+        temp = head.next
+        
+        head = self.reverse(head.next)
+        temp.next = temp_tail
+        temp_tail.next = None
+        
+        return head
+```
+
+```python
+# 答案
+class Solution:
+
+    def reverse(self, head):
+        #curt表示前继节点
+        curt = None
+        while head != None:
+            #temp记录下一个节点，head是当前节点
+            temp = head.next
+            head.next = curt
+            curt = head
+            head = temp
+		# 我觉得这样做有一个问题就是最后一个节点不指向null
+        return curt
+```
+
+# 带环链表
+## 题目描述
+102	
+判断链表是否带环？
+
+## 题目分析
+快慢指针，没啥好说的
+
+## 题目解答
+```python
+"""
+Definition of ListNode
+class ListNode(object):
+    def __init__(self, val, next=None):
+        self.val = val
+        self.next = next
+"""
+
+class Solution:
+    """
+    @param head: The first node of linked list.
+    @return: True if it has a cycle, or false
+    """
+    def hasCycle(self, head):
+        if not head:
+            return False
+        slow = head
+        fast = head.next
+        
+        while fast is not None and fast.next is not None:
+            if fast == slow:
+                return True
+            fast = fast.next.next
+            slow = slow.next
+            
+        return False
+```
+
+# 交叉链表
+## 题目描述
+380
+找到两个单链表最开始的交叉节点。
+需满足 O(n) 时间复杂度，且仅用 O(1) 内存。
+
+```
+输入：
+	A:          a1 → a2
+	                   ↘
+	                     c1 → c2 → c3
+	                   ↗            
+	B:     b1 → b2 → b3
+输出：c1
+解释：在节点 c1 开始交叉。
+```
+
+## 题目分析
+先让两者长度相等，再同时往后找是否有交点
+
+## 题目解答
+```python
+"""
+Definition of ListNode
+class ListNode(object):
+    def __init__(self, val, next=None):
+        self.val = val
+        self.next = next
+"""
+
+class Solution:
+    """
+    @param headA: the first list
+    @param headB: the second list
+    @return: a ListNode
+    """
+    def getIntersectionNode(self, headA, headB):
+        lenA = self.getLength(headA)
+        lenB = self.getLength(headB)
+        
+        # move on linklist to make them have the same length
+        nodeA = headA
+        nodeB = headB
+        while lenA > lenB:
+            nodeA = nodeA.next
+            lenA -= 1
+        
+        while lenB > lenA:
+            nodeB = nodeB.next
+            lenB -= 1
+        
+        while nodeA != nodeB:
+            nodeA = nodeA.next
+            nodeB = nodeB.next
+        
+        return nodeA
+
+    
+    def getLength(self, head):
+        length = 0
+        while head is not None:
+            head = head.next
+            length += 1
+        return length
+```
+
+
+
+# 多个排序链表合并
+## 题目描述
+104
+合并k个排序链表，并且返回合并后的排序链表。尝试分析和描述其复杂度。
+## 题目分析
+两个思路：
+- 两两合并 nlog(n)
+- 构建一个堆，每次取堆顶 nlog(n)
+
+## 题目解答
+
+```python
+"""
+Definition of ListNode
+class ListNode(object):
+
+    def __init__(self, val, next=None):
+        self.val = val
+        self.next = next
+"""
+class Solution:
+    """
+    @param lists: a list of ListNode
+    @return: The head of one sorted list.
+    """
+    def mergeKLists(self, lists):
+        if not lists:
+            return None
+        
+        return self.merge_range_lists(lists, 0, len(lists) - 1)
+        
+    def merge_range_lists(self, lists, start, end):
+        if start == end:
+            return lists[start]
+        
+        mid = (start + end) // 2
+        left = self.merge_range_lists(lists, start, mid)
+        right = self.merge_range_lists(lists, mid + 1, end)
+        return self.merge_two_lists(left, right)
+        
+    def merge_two_lists(self, headA, headB):
+        # 两两merge需要熟练
+        dummy = ListNode(0)
+        head = dummy
+        curr = head        
+        while headA and headB:
+            if headA.val < headB.val:
+                curr.next = headA
+                curr = curr.next
+                headA = headA.next
+            else:
+                curr.next = headB
+                curr = curr.next
+                headB = headB.next
+        
+        if headA:
+            curr.next = headA
+        if headB:
+            curr.next = headB
+        
+        return head.next
+```
+
+# 链表排序
+## 题目描述
+98
+在 O(n log n) 时间复杂度和常数级的空间复杂度下给链表排序。
+## 题目分析
+原理就是快排和归并排序
+主要是看一下和数组排序的写法细节的区别，链表写起来稍微复杂一点
+- 快排
+	- ``find_middle()``
+	- ``merge()``
+	- ``merge_sort()``
+- 归并排序
+	- 有点繁琐，todo
+
+## 题目解答
+
+```java
+// version 1: Merge Sort
+public class Solution {            
+    private ListNode findMiddle(ListNode head) {
+        ListNode slow = head, fast = head.next;
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        return slow;
+    }    
+
+    private ListNode merge(ListNode head1, ListNode head2) {
+        ListNode dummy = new ListNode(0);
+        ListNode tail = dummy;
+        while (head1 != null && head2 != null) {
+            if (head1.val < head2.val) {
+                tail.next = head1;
+                head1 = head1.next;
+            } else {
+                tail.next = head2;
+                head2 = head2.next;
+            }
+            tail = tail.next;
+        }
+        if (head1 != null) {
+            tail.next = head1;
+        } else {
+            tail.next = head2;
+        }
+
+        return dummy.next;
+    }
+
+    public ListNode sortList(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        ListNode mid = findMiddle(head);
+
+        ListNode right = sortList(mid.next);
+        mid.next = null;
+        ListNode left = sortList(head);
+
+        return merge(left, right);
+    }
+}
+
+// version 2: Quick Sort 1
+public class Solution {
+    public ListNode sortList(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        
+        ListNode mid = findMedian(head); // O(n)
+        
+        ListNode leftDummy = new ListNode(0), leftTail = leftDummy;
+        ListNode rightDummy = new ListNode(0), rightTail = rightDummy;
+        ListNode middleDummy = new ListNode(0), middleTail = middleDummy;
+        while (head != null) {
+            if (head.val < mid.val) {
+                leftTail.next = head;
+                leftTail = head;
+            } else if (head.val > mid.val) {
+                rightTail.next = head;
+                rightTail = head;
+            } else {
+                middleTail.next = head;
+                middleTail = head;
+            }
+            head = head.next;
+        }
+        
+        leftTail.next = null;
+        middleTail.next = null;
+        rightTail.next = null;
+        
+        ListNode left = sortList(leftDummy.next);
+        ListNode right = sortList(rightDummy.next);
+        
+        return concat(left, middleDummy.next, right);
+    }
+    
+    private ListNode findMedian(ListNode head) {
+        ListNode slow = head, fast = head.next;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return slow;
+    }
+    
+    private ListNode concat(ListNode left, ListNode middle, ListNode right) {
+        ListNode dummy = new ListNode(0), tail = dummy;
+        
+        tail.next = left; tail = getTail(tail);
+        tail.next = middle; tail = getTail(tail);
+        tail.next = right; tail = getTail(tail);
+        return dummy.next;
+    }
+    
+    private ListNode getTail(ListNode head) {
+        if (head == null) {
+           return null;
+        } 
+       
+        while (head.next != null) {
+            head = head.next;
+        }
+        return head;
+    }
+}
+```
+
+# 深复制链表（复制带随机指针的链表）
+## 题目描述
+105
+给出一个链表，每个节点包含一个额外增加的随机指针可以指向链表中的任何节点或空的节点。
+
+返回一个深拷贝的链表。 
+
+挑战
+可否使用O(1)的空间
+## 题目分析
+深复制提醒，图/链表
+背下来
+
+## 题目解答
+
+```python
+class Solution:
+    # @param head: A RandomListNode
+    # @return: A RandomListNode
+    def copyRandomList(self, head):
+        if not head:
+            return None
+        
+        # 在字典中存储所有点
+        # use a map to store {oldNode : newNode}
+        m = {}
+        p = head
+        while p:
+            # copy each node
+            m[p] = RandomListNode(p.label)
+            p = p.next
+
+        p = head
+        while p:
+            # 构建newNode间的指向关系
+            # building pointers between nodes
+            if p.next:
+                m[p].next = m[p.next]
+            if p.random:
+                m[p].random = m[p.random]
+            p = p.next
+
+        return m[head]
+```

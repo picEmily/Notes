@@ -8,7 +8,7 @@
 - 远程桌面
 - x server
 
-### 远程桌面
+### 远程桌面   (非必须)
 ref: https://www.interserver.net/tips/kb/install-xrdp-ubuntu-server-xfce-template/
 
 ```bash
@@ -33,7 +33,7 @@ ip:3389
 username: [linux username]
 进入了以后选xrong,用设置的linux密码登录
 
-### xserver 登录
+### xserver 登录 （非必须）
 - 选择xserver：有很多，我下载的是：https://kb.lsa.umich.edu/lsait/index.php/X_Servers_for_Windows
 - 启动ssh
 
@@ -51,7 +51,9 @@ sudo vi /etc/ssh/sshd_config
 ```
 ## 各种配置
 ### root 
+```
 sudo su -
+```
 
 ### 换源
 ubuntu18.04更换国内源
@@ -87,7 +89,7 @@ deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-security main restricted
 deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-security main restricted universe multiverse
 deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-proposed main restricted universe multiverse
 deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-proposed main restricted universe multiverse
-``` 
+```
 163源：
 ```
 deb http://mirrors.163.com/ubuntu/ bionic main restricted universe multiverse
@@ -175,3 +177,5 @@ wsl的路径
 ``\\wsl$``
 
 https://www.cnblogs.com/lepeCoder/p/wsl_dir.html
+
+vscodekk可以直接装WSL插件挺方便的
