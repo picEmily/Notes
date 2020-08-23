@@ -21,6 +21,10 @@ The nested dropdown tree syntax can be:
         This is a dropdown with text!
     </details>
 </details>
+
+Notes:
+github can't use customized css for the security reason(including inline css style="")
+local markdown editor can render customized css correctly
 """
 
 from pathlib import Path
@@ -32,7 +36,7 @@ BASE_FILE_URL = BASE_URL + "/blob/master/"
 BASE_DIR_URL = BASE_URL + "/tree/master/"
 IGNORE = [".git", "__pycache__", ".gitignore",
           ".pytest_cache", "电脑修复", "梯子", ".vscode"]
-MARGIN = 25
+MARGIN = 3
 
 soup = BeautifulSoup("", features="html.parser")
 
@@ -89,9 +93,9 @@ def tree_to_html(root):
 
         # create tag
         new_tag_p = soup.new_tag(
-            "p", style="margin-left:{}px".format(str(MARGIN)), id=root.name["url"])
+            "p", style="margin-left:{}%".format(str(MARGIN)), id=root.name["url"])
         new_tag_a = soup.new_tag("a", href=root.name["url"])
-        new_tag_a.string = root.name["name"]
+        new_tag_a.string = '|' + root.level*'--' + root.name["name"]
 
         # generate nested tags
         parent_tag = soup.find(id=root.parent.name["url"])
@@ -107,10 +111,10 @@ def tree_to_html(root):
 
         # create tag
         new_tag_details = soup.new_tag(
-            "details", style="margin-left:{}px".format(str(MARGIN)), id=root.name["url"])
+            "details", style="margin-left:{}%".format(str(MARGIN)), id=root.name["url"])
         new_tag_summary = soup.new_tag("summary")
         new_tag_a = soup.new_tag("a", href=root.name["url"])
-        new_tag_a.string = root.name["name"]
+        new_tag_a.string = '|' + root.level*'--' + root.name["name"]
 
         # generate nested tags
         parent_tag = soup.find(id=root.parent.name["url"])
