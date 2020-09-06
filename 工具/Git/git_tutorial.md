@@ -1,3 +1,5 @@
+[TOC]
+
 # branch 
 
 创建新分支：
@@ -53,6 +55,20 @@
 - ``git reset <commit id / commit reference>`` 回退提交记录
 
 - ``git revert <commit id / commit reference>`` 会记录下来这次回退操作，用于远程
+
+例子：
+
+提交记录：C0 --> C1 --> C2 --> bug commit
+
+```bash
+# 比如我刚提交一次 bug commit，且push了
+git revert HEAD / git revert bug_commit
+git push
+
+# 会把C2的记录消除，但是 bug  commit 仍在
+git revert HEAD^
+git push
+```
 
 
 
