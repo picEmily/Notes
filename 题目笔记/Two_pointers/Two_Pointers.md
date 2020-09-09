@@ -323,7 +323,7 @@ class Solution:
 ```
 
 
-# [名字]
+# 桶排序
 ## 题目描述
 给定一个有n个对象（包括k种不同的颜色，并按照1到k进行编号）的数组，将对象进行分类使相同颜色的对象相邻，并按照1,2，...k的顺序进行排序。
 ```
@@ -473,7 +473,16 @@ class Solution:
 ```
 
 # Partition Array 数组划分
+这三道题一块写
+
+- 31 数组划分
+- 464 快排
+- 5 第k大元素
+
 ## 题目描述
+
+31.
+
 给出一个整数数组 nums 和一个整数 k。划分数组（即移动数组 nums 中的元素），使得：
 
 所有小于k的元素移到左边
@@ -500,6 +509,7 @@ class Solution:
             while start <= end and nums[start] < k:
                 start += 1
             while start <= end and nums[end] >= k:
+              	# why it's >= here ???
                 end -= 1
             if start <= end:
                 nums[start], nums[end] = nums[end], nums[start]
@@ -510,6 +520,8 @@ class Solution:
 
 # 第K大元素
 ## 题目描述
+5
+
 给一个数组
 要求时间复杂度为O(n)，空间复杂度为O(1)
 
@@ -519,6 +531,10 @@ class Solution:
 又是partition的应用了，就是经过多次partition后让pivot成为第len(A) - k个数字（第k大）
 
 topK问题用堆来实现
+
+
+
+区别前k大元素，前k大元素是heap做的
 
 ## 题目解答
 ```python
