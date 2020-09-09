@@ -3,11 +3,11 @@
 ## Redis 数据类型
 （**重点**）：区别其他KV数据库的很大一个优点（值有多种类型！）
 - string
-- set(unordered)
+- hash
+  - kv pair (就是键可以是一个hashmap)
 - list
 - ordered set
-- hash
-	- kv pair (就是键可以是一个hashmap)
+- set(unordered)
 
 ## Redis 内存划分
 https://www.cnblogs.com/kismetv/p/8654978.html
@@ -144,3 +144,4 @@ while True:
 
 # Redis击穿
 参见缓存穿透，击穿，雪崩
+
