@@ -146,3 +146,6 @@ logs/
 # unsafe
 电脑修复/
 梯子/
+
+# system file
+.DS_Store
