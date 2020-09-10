@@ -39,16 +39,18 @@ class BaseRequestHandler:
         pass
 """
 
+
 class EchoHandler(BaseRequestHandler):
     def handle(self):
         print('Got connection from', self.client_address)
         while True:
-            msg = self.request.recv(8192) 
-            if not msg: 
-                break 
+            msg = self.request.recv(8192)
+            if not msg:
+                break
             self.request.send(msg)
 
-if __name__ == '__main__': 
+
+if __name__ == '__main__':
     # __init__(server_address, RequestHandlerClass)
-    serv = TCPServer(('', 2333), EchoHandler)   
+    serv = TCPServer(('', 2333), EchoHandler)
     serv.serve_forever()
