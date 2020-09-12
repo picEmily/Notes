@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+    <input id="file" type="file" onchange="upload()"/>
+    <img id="img" style="width:30%"/>
+</html>
+
+<script>
+    let image = window.document.getElementById("img");
+    function upload() {
+        let f = document.getElementById("file").files[0];
+        console.log(f.name);
+        let reads = new FileReader();
+        let url = window.URL.createObjectURL(f);
+        image.src = url;
+    }
+</script>
