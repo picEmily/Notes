@@ -1,4 +1,19 @@
+# DFS
+
+一般都是回溯来做
+
+回溯基本分为两类
+
+- 全排列（neibor节点是unvisited里面的节点）
+- 分割字符串（插空）
+
+或者有的很直观给一个树/图，然后搜索路径。
+
+- 搜索一条路径
+- 搜索所有路径
+
 # Permutation 全排列
+
 ## 题目描述
 15
 给定一个数字列表，返回其所有可能的排列。
@@ -93,7 +108,7 @@ class Solution:
 
 # 分割字符串Split String
 ## 题目描述
-608
+680
 给一个字符串,你可以选择在一个字符或两个相邻字符之后拆分字符串,使字符串由仅一个字符或两个字符组成,输出所有可能的结果
 
 ```
@@ -221,7 +236,10 @@ class Solution:
 
 ## 题目分析
 有顺序要求，所以一开始先sort
-其他的就是很标准的全排列问题，和前两题类似
+其他的就是很标准分割字符串问题，要传一个start参数
+
+- 分割字符串是在nums中插空，把字符串分隔开
+- 数字组合是从nums中找到结果数字（对应分割字符串插空的空隙）
 
 ## 题目解答
 ```python
@@ -341,7 +359,7 @@ n皇后问题是将n个皇后放置在n*n的棋盘上，皇后彼此之间不能
 一点小困难是 ``is_valid()``稍微复杂
 
 > python 中字符串替换某个字符
-> python 字符串是 **不可变类型**，所以一下操作不可行
+> python 字符串是 **不可变类型**，所以以下操作不可行
 ```python
 # 不可行的操作
 s = 'foo'
@@ -416,12 +434,19 @@ class Solution:
 给定一个可能具有重复数字的列表，返回其所有可能的子集。
 
 ## 题目分析
-一看就是全排列
+思路一：
+
+一看就是全排列类型（虽然是组合）。先排序，然后按照全排列的做法来做。
 重点还是在于
+
 - 怎么样组织这个全排列，是否用循环/用一个怎样的循环
 - 去重的条件
 
 本题中for loop表示的情况就是我们不把i以前的数字添加到path中了
+
+思路二：
+
+另一种思路是：组合不考虑顺序，每个元素只有出现/不出现两种情况。
 
 ## 题目解答
 ```python
@@ -613,9 +638,9 @@ class Solution:
             return False
         if board[row][col] == word[0] and not visited[row][col]:
             visited[row][col] = True
-            for dir in Solution.direction:
-                if self.helper(board, word[1:], visited, row+dir[0], col+dir[1]):
-                    return True
+              for dir in Solution.direction:
+                  if self.helper(board, word[1:], visited, row+dir[0], col+dir[1]):
+                      return True
             visited[row][col] = False
         
         return False
@@ -681,7 +706,7 @@ class Solution:
         return min(self.minDepth(root.left) + 1, self.minDepth(root.right) + 1)
 ```
 
-```
+```python
 # 格式化dfs写法
 class Solution:
     """
@@ -689,6 +714,7 @@ class Solution:
     @return: An integer
     """
     def minDepth(self, root):
+      	# 遍历所有根到叶子的路径，然后找出最小值
         if not root:
             return 0
         height = []
@@ -697,6 +723,7 @@ class Solution:
         
     def dfs(self, node, path_len, height):
         if not node.left and not node.right:
+          	# base case：叶子节点
             path_len += 1
             height.append(path_len)
             return

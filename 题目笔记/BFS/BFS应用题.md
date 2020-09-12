@@ -63,3 +63,118 @@ class Solution:
         
         return False
 ```
+
+
+
+# 无向图中的最短路径
+
+## 题目描述
+
+### **描述**
+
+814
+
+给定一个无向图, 图中所有边的长度为1, 再选定图中的两个节点, 返回这两个节点之间最短的路径的长度.
+
+```
+输入: graph = {1,2,4#2,1,4#3,5#4,1,2#5,3}, node1 = 3, node2 = 5
+输出: 1
+
+解释: 
+  1------2  3
+   \     |  | 
+    \    |  |
+     \   |  |
+      \  |  |
+        4   5
+```
+
+## 题目分析
+
+- Bfs 依旧类似linkedin找人脉的n度关系，记录一个level，用层序遍历的思想
+- 两种思路，一个起点开始bfs，两个起点开始bfs
+  - 双向肯定效果更好，但是写起来复杂一点
+- 这里是无向图，老老实实记录visited set。树这种有向的可以不用记。
+
+## 题目解答
+
+```python
+# 一个起点开始bfs
+class Solution:
+    """
+    @param graph: a list of Undirected graph node
+    @param A: nodeA
+    @param B: nodeB
+    @return:  the length of the shortest path
+    """
+    def shortestPath(self, graph, A, B):
+        queue = []
+        visited = set()
+        
+        queue.append(A)
+        
+        
+        level = -1
+        while queue:
+            # print([q.label for q in queue])
+            length = len(queue)
+            level += 1
+            for _ in range(length):
+                node = queue.pop(0)
+                visited.add(node)
+                if node == B:
+                    return level
+                
+                for n in node.neighbors:
+                    if n in visited:
+                        continue
+                    queue.append(n)
+        return -1
+```
+
+
+
+```python
+# 双向bfs
+# 抄的，大概就是这个思路吧
+from collections import deque
+class Solution:
+    """
+    @param graph: a list of Undirected graph node
+    @param A: nodeA
+    @param B: nodeB
+    @return:  the length of the shortest path
+    """
+    def shortestPath(self, graph, A, B):
+        if A == B:
+            return 0
+        
+        queuel = deque([A])
+        queuer = deque([B])
+        visited = set([A, B])
+        dl = 0
+        dr = 0
+        
+        while queuel and queuer:
+            dl += 1
+            for _ in range(len(queuel)):
+                nodel = queuel.popleft()
+                for neibl in nodel.neighbors:
+                    if neibl in queuer:
+                        return dl + dr
+                    if neibl not in visited:
+                        queuel.append(neibl)
+                        visited.add(neibl)
+            
+            dr += 1
+            for _ in range(len(queuer)):
+                noder = queuer.popleft()
+                for neibr in noder.neighbors:
+                    if neibr in queuel:
+                        return dl + dr
+                    if neibr not in visited:
+                        queuer.append(neibr)
+                        visited.add(neibr)
+        
+        return -1
+```

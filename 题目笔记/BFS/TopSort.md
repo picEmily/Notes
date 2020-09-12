@@ -1,8 +1,28 @@
 # 拓扑排序
 127 拓扑排序
-# 题目分析
+
+**描述**
+
+给定一个有向图，图节点的拓扑排序定义如下:
+
+- 对于图中的每一条有向边 `A -> B` , 在拓扑排序中A一定在B之前.
+- 拓扑排序中的第一个节点可以是图中的任何一个没有其他节点指向它的节点.
+
+**follow up**
+
+找到所有排序
+
+## 题目分析
+
+那么我们仍然需要一个queue（入度为0存进去）
+一个**indegree map**保存neibour的映射
+
 怎么输出所有可能排序？？
-# 题目解答
+
+我觉得可以把构建的queue不顺着pop，而是用回溯的方法找出全排列？
+
+## 题目解答
+
 ```python
 """
 Definition for a Directed graph node
@@ -21,7 +41,8 @@ class Solution:
         node_to_indegree = self.get_indegree(graph)
 
         # bfs
-        order = []
+          order = []
+        # 起点是没有人指向的点
         start_nodes = [n for n in graph if node_to_indegree[n] == 0]
         queue = collections.deque(start_nodes)
         while queue:
@@ -30,11 +51,16 @@ class Solution:
             for neighbor in node.neighbors:
                 node_to_indegree[neighbor] -= 1
                 if node_to_indegree[neighbor] == 0:
+                  	# 加入queue的条件是indegree减为0
                     queue.append(neighbor)
                 
         return order
     
     def get_indegree(self, graph):
+      	“”“
+        构建一个map {node: indegree}
+        indegree means the amount of nodes point to this node
+        ”“”
         node_to_indegree = {x: 0 for x in graph}
 
         for node in graph:
@@ -44,11 +70,48 @@ class Solution:
         return node_to_indegree
 ```
 
+```python
+# DFS 解题，不太喜欢
+class Solution:
+    """
+    @param graph: A list of Directed graph node
+    @return: Any topological order for the given graph.
+    """
+    def topSort(self, graph):
+        # 依旧需要一个indegree map
+        indegree = {}
+        for x in graph:
+            indegree[x] = 0
+
+        for i in graph:
+            for j in i.neighbors:
+                indegree[j] += 1
+
+        ans = []
+        for i in graph:
+            if indegree[i] == 0:
+              	# 找起点的方式也一样
+                self.dfs(i, indegree, ans)
+        return ans
+    
+    def dfs(self, i, indegree, ans):
+        ans.append(i)
+        indegree[i] -= 1		# 为什么要减两次1？
+        for j in i.neighbors:
+            indegree[j] -= 1
+            if indegree[j] == 0:
+                self.dfs(j, indegree, ans)
+```
+
+
+
 # 课程表
+
 615 现在你总共有 n 门课需要选，记为 0 到 n - 1.
 一些课程在修之前需要先修另外的一些课程，比如要学习课程 0 你需要先学习课程 1 ，表示为[0,1]
 给定n门课以及他们的先决条件，判断是否可能完成所有课程？
-# 题目分析
+## 题目分析
+
 拓扑排序 复习拓扑排序
 
 步骤：
@@ -60,7 +123,8 @@ class Solution:
 - 如果无法遍历完所有的结点，则意味着当前的图不是有向无环图。不存在拓扑排序。
 
 入度：指向这个节点的节点个数
-# 题目解答
+## 题目解答
+
 ```python
 from collections import deque
 
@@ -117,10 +181,11 @@ class Solution:
 输出: [0,1,2,3] or [0,2,1,3]
 ```
 
-# 题目分析
+## 题目分析
+
 上一题返回true false，这一题返回一个合法的排序
 
-# 题目解答
+## 题目解答
 
 ```python
 from collections import deque
@@ -164,12 +229,14 @@ class Solution:
 判断是否序列 org 能唯一地由 seqs重构得出. org是一个由从1到n的正整数排列而成的序列，1 ≤ n ≤ 10^4。 重构表示组合成seqs的一个最短的父序列 (意思是，一个最短的序列使得所有 seqs里的序列都是它的子序列).
 判断是否有且仅有一个能从 seqs重构出来的序列，并且这个序列是org。
 
-# 题目分析
+## 题目分析
+
 翻译成人话就是：序列能否是另一个序列的子序列
 
 **序列可以翻译成有向图**，而有向图可以用拓扑排序来解决问题
 
-# 题目解答
+## 题目解答
+
 ```
 待解决
 ```

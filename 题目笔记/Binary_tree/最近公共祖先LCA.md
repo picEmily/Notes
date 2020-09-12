@@ -6,7 +6,12 @@
 
 578是最general的情况：如果不存在就返回None
 ## 题目分析
+思路一：
+
 我的第一个思路，先用dfs（回溯）找到A和B的path，然后再通过比较path找到LCA
+
+思路二：
+
 答案的方法利用递归，返回是否找到A，是否找到B，LCA(Null 或者一个点)。但是我并没有很明白为什么要这么做（大概是可以通过递归和分类讨论，不需要很大的代码量和思考）
 
 递归查找A和B， 找到A和B第一次在同一棵子树中的子树根节点即是LCA。
@@ -40,6 +45,7 @@ class Solution:
         self.find(root, path_B, B)
         
         idx = 0
+        # 思路一
         while True:
             if idx < len(path_A) and idx < len(path_B):
                 if path_A[idx] == path_B[idx]:
@@ -52,10 +58,13 @@ class Solution:
             else:
                 idx -= 1
                 break
+        # 思路二
+        # 有点那个交叉链表找公共点的意思，先把长度搞成一样，然后倒着遍历找到第一个公共点
         
         return path_A[idx]
         
     def find(self, root, result, node):
+      	# dfs 搜索路径
         if root:
             # put in 
             result.append(root)
@@ -91,7 +100,7 @@ class Solution:
         if root is None:
             return False, False, None
         
-        # left_lca 指的是公共节点或者
+        # left_lca 指的是公共节点 没有就是None
         left_a, left_b, left_lca = self.helper(root.left, A, B)
         right_a, right_b, right_lca = self.helper(root.right, A, B)
         
