@@ -7,25 +7,25 @@
 ## 配置Arduino IDE
 
 **首选项** 中在 **附加开发板管理器网址** 中填写``http://arduino.esp8266.com/stable/package_esp8266com_index.json``
-![](https://i.imgur.com/XHmMMuK.png)
+<img src="./images/arduino_ide_tutorial/arduino_ide_tutorial1.png" style="zoom:67%;" />
 
 **工具》开发板》开发板管理器**中下载Nodemcu相关
-![](https://i.imgur.com/qxhNSNv.png)
+<img src="./images/arduino_ide_tutorial/arduino_ide_tutorial2.png" style="zoom:67%;" />
 
 然后在**工具》开发板**选择自己的开发板
 选择上传的端口（COM）
-![](https://i.imgur.com/L6RUYxz.png)
+<img src="./images/arduino_ide_tutorial/arduino_ide_tutorial3.png" style="zoom:67%;" />
 
 ## 上传示例文件
 选择示例文件
-![](https://i.imgur.com/0NlEv94.png)
+<img src="./images/arduino_ide_tutorial/arduino_ide_tutorial4.png" style="zoom:67%;" />
 
 上传
-![](https://i.imgur.com/VIV7vNt.png)
+<img src="./images/arduino_ide_tutorial/arduino_ide_tutorial5.png" style="zoom:67%;" />
 
 # GPIO pins 
 
-![](https://i.imgur.com/faZ66Ut.png)
+<img src="./images/arduino_ide_tutorial/arduino_ide_tutorial6.png" style="zoom:33%;" />
 
 在这个头文件里面定义了
 https://github.com/esp8266/Arduino/blob/3e7b4b8e0cf4e1f7ad48104abfc42723b5e4f9be/variants/nodemcu/pins_arduino.h

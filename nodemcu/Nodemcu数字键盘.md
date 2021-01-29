@@ -8,7 +8,7 @@ https://embedjournal.com/interface-4x4-matrix-keypad-with-microcontroller/
 
 # 数字键盘电路
 
-![](https://i.imgur.com/uvUNVSx.png)
+<img src="./images/numpad/numpad.png" style="zoom:33%;" />
 
 # 准备工作
 1. 准备好硬件，接线
@@ -17,6 +17,7 @@ https://embedjournal.com/interface-4x4-matrix-keypad-with-microcontroller/
 ![](https://i.imgur.com/ZuSsNH5.png)
 note: 图中这个接线有点问题，应该接D0~D7。
 代码中
+
 ```C
 byte rowPins[ROWS] = {D7, D6, D5, D4}; 
 byte colPins[COLS] = {D3, D2, D1, D0}; 
@@ -62,7 +63,7 @@ void loop() {
 }
 ```
 
-![](https://i.imgur.com/Ld9rhob.png)
+<img src="./images/numpad/numpad2.png" style="zoom:70%;" />
 
 
 
