@@ -26,9 +26,20 @@
 
   https://www.bilibili.com/video/BV1yz4y1r7XE/?spm_id_from=333.788.videocard.19
 
-  
+- 监控机器人
+
+  https://www.qutaojiao.com/6516.html
+
+
 
 # 入门项目
 
 - 点灯，闪烁
-- 配网
+- 配网，at，sta，sta+ap 模式，webserver
+  - bootstrap(cdn) https://github.com/projetsdiy/ESP8266WebServer-Bootstrap-Bootswatch
+  - 远程点灯
+  - 公网访问（MQTT） https://segmentfault.com/a/1190000039000169
+  - wifi钓鱼(https://www.freebuf.com/news/141922.html)，wifi攻击
+- 输出图像
+- 视频传输（串口/wifi）
+- 摄像头 https://post.smzdm.com/p/amm03d0d/
